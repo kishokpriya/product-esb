@@ -1,0 +1,33 @@
+<definitions xmlns="http://ws.apache.org/ns/synapse">
+
+    <sequence name="fault">
+        <log level="full">
+            <property name="MESSAGE" value="Executing default 'fault' sequence"/>
+            <property xmlns:ns="http://org.apache.synapse/xsd"
+                      name="ERROR_CODE"
+                      expression="get-property('ERROR_CODE')"/>
+            <property xmlns:ns="http://org.apache.synapse/xsd"
+                      name="ERROR_MESSAGE"
+                      expression="get-property('ERROR_MESSAGE')"/>
+        </log>
+        <property name="ERROR_WHILE_SENDING" value="Failed to send the message" action="set" scope="axis2"/>
+        <respond/>
+    </sequence>
+    <sequence name="main">
+        <in>
+            <log level="full"/>
+            <send>
+                <endpoint>
+                    <address uri="https://localhost:8443/"/>
+                </endpoint>
+            </send>
+        </in>
+        <out>
+            <log>
+                <property name="STATE" value="Out sequence reached"/>
+            </log>
+            <drop/>
+        </out>
+        <description>The main sequence for the message mediation</description>
+    </sequence>
+</definitions>
